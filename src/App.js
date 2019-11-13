@@ -1,26 +1,62 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import ReactQuill from "react-quill";
+import DropComponent from "./DropComponent";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+import "./App.css";
+import "react-quill/dist/quill.snow.css";
+
+const modules = {
+  toolbar: [
+    ["bold", "italic", "underline"],
+    [{ list: "ordered" }, { list: "bullet" }],
+    ["link"]
+  ]
+};
+
+class App extends React.Component {
+  state = {
+    text: "",
+    files: []
+  };
+
+  handleChange = value => {
+    this.setState({
+      text: value
+    });
+  };
+
+  handleFileUpload = file => {
+    this.setState({
+      files: this.state.files.concat(file)
+    });
+  };
+
+  render() {
+    return (
+      <div className="app">
+        <div className="text-editor">
+          <ReactQuill
+            theme="snow"
+            value={this.state.text}
+            onChange={this.handleChange}
+            modules={modules}
+          />
+        </div>
+        <DropComponent
+          onFileUpload={this.handleFileUpload}
+          files={this.state.files}
+        />
+
+        <button
+          onClick={() => {
+            console.log(this.state);
+          }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+          throw component state into console.log
+        </button>
+      </div>
+    );
+  }
 }
 
 export default App;

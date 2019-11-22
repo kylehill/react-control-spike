@@ -26,7 +26,9 @@ const DropComponent = props => {
       });
     };
 
-    reader.readAsArrayBuffer(file);
+    if (file.type.startsWith("image/")) {
+      reader.readAsDataURL(file);
+    }
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -44,8 +46,13 @@ const DropComponent = props => {
       <ul>
         {props.files.map((file, index) => {
           return (
-            <li key={index}>
-              {file.name} - {convertToHumanReadableSize(file.size)}
+            <li className="drop-file" key={index}>
+              <div className="drop-image-container">
+                <img className="drop-image-preview" src={file.result} />
+              </div>
+              <div className="drop-file-container">
+                {file.name} - {convertToHumanReadableSize(file.size)}
+              </div>
             </li>
           );
         })}
